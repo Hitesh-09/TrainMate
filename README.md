@@ -75,5 +75,5 @@ All in one place — quick, efficient, and stress-free.
 
 ---
 
-## 🏁 Built With ❤️ at [Hackathon Name]
+## 🏁 Built With ❤️ 
 
