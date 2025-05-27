@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Plan Your Journey{% endblock %}
+
+{% block additional_css %}
+<style>
+    .hero-section {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        padding: 40px 0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        animation: fadeInDown 1s ease;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--dark-text);
+        max-width: 700px;
+        margin-bottom: 2.5rem;
+        animation: fadeInUp 1s ease;
+    }
+    
+    .search-container {
+        width: 100%;
+        max-width: 700px;
+        padding: 30px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        animation: fadeIn 1.2s ease;
+        position: relative;
+        z-index: 5; /* Ensure the form is above other elements */
+    }
+    
+    .btn-primary {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        background: var(--gradient-primary);
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        filter: brightness(1.1);
+    }
+    
+    .train-animation {
+        position: absolute;
+        bottom: -20px;
+        width: 100%;
+        height: 150px;
+        z-index: 1;
+        pointer-events: none; /* Make sure animation doesn't interfere with clicks */
+    }
+    
+    .train-svg {
+        height: 60px;
+        color: var(--primary-color);
+        position: absolute;
+        left: -100px;
+        bottom: 60px;
+        animation: moveTrain 15s linear infinite;
+        pointer-events: none;
+    }
+    
+    .train-track {
+        position: absolute;
+        bottom: 50px;
+        width: 100%;
+        height: 6px;
+        background-color: #333;
+        border-radius: 3px;
+        pointer-events: none;
+    }
+    
+    @keyframes moveTrain {
+        from { left: -100px; }
+        to { left: calc(100% + 100px); }
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .search-container {
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Struggling with Waitlisted Tickets?</h1>
+      <p class="hero-subtitle">TrainMate helps you find alternate routes, nearby stations, and break journeys — instantly.</p>
+      
+      <div class="search-container">
+        <form action="/results" method="GET" id="search-form">
+    <div class="mb-3">
+      <label for="source" class="form-label">From (Source Station):</label>
+      <input type="text" class="form-control" id="source" name="source" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="destination" class="form-label">To (Destination Station):</label>
+      <input type="text" class="form-control" id="destination" name="destination" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="date" class="form-label">Date of Journey:</label>
+      <input type="date" class="form-control" id="date" name="date" required>
+    </div>
+    
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="flexible-dates">
+      <label class="form-check-label" for="flexible-dates">
+        Show flexible dates (±3 days)
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3" onclick="return validateForm()">
+      Find Routes <span class="ms-1">📍</span>
+    </button>
+  </form>
+      </div>
+      <div class="train-animation">
+        <!-- SVG train animation will be placed here -->
+        <svg class="train-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" style="pointer-events: none;">
+          <path d="M384 96H256C220.7 96 192 124.7 192 160v160c0 35.3 28.7 64 64 64h128c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64zM256 320c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zM128 160H64C28.7 160 0 188.7 0 224v96c0 35.3 28.7 64 64 64h64V160zm384 0v224h64c35.3 0 64-28.7 64-64v-96c0-35.3-28.7-64-64-64h-64z" fill="currentColor"/>
+        </svg>
+        <div class="train-track"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function validateForm() {
+    console.log("Validating form...");
+    
+    // Simple validation
+    const source = document.getElementById('source').value.trim();
+    const destination = document.getElementById('destination').value.trim();
+    const date = document.getElementById('date').value;
+    
+    let isValid = true;
+    
+    if (!source) {
+      document.getElementById('source').style.borderColor = 'red';
+      isValid = false;
+    }
+    
+    if (!destination) {
+      document.getElementById('destination').style.borderColor = 'red';
+      isValid = false;
+    }
+    
+    if (!date) {
+      document.getElementById('date').style.borderColor = 'red';
+      isValid = false;
+    }
+    
+    console.log("Form is valid:", isValid);
+    
+    if (!isValid) {
+      alert("Please fill in all required fields");
+    }
+    
+    return isValid;
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    // Reset border color on focus
+    ['source', 'destination', 'date'].forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        field.addEventListener('focus', function() {
+          this.style.borderColor = '';
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}

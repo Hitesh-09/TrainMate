@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrainMate - {% block title %}Smart Train Routing{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <style>
+        :root {
+            /* Updated Color Palette */
+            --primary-color: #4f46e5; /* Indigo */
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --accent-green: #22c55e; /* Lime Green for Available */
+            --accent-red: #f43f5e;   /* Coral Red for Waitlist */
+            --light-bg: #f9fafb;
+            --light-gray: #f3f4f6;
+            --dark-text: #1f2937;
+            --secondary-text: #4b5563;
+            --border-color: #e5e7eb;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #22c55e 100%);
+            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.75rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .navbar-nav .nav-link {
+            color: var(--dark-text);
+            font-weight: 500;
+            margin: 0 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        
+        .content {
+            padding: 2rem 0;
+        }
+        
+        /* Responsive Improvements */
+        @media (max-width: 768px) {
+            .content {
+                padding: 1rem 0;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .navbar {
+                padding: 10px 0;
+            }
+            
+            .navbar-collapse {
+                background-color: white;
+                padding: 10px 15px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                margin-top: 10px;
+            }
+            
+            .navbar-nav .nav-link {
+                padding: 10px 15px;
+                margin: 0;
+                border-radius: 6px;
+            }
+            
+            .navbar-nav .nav-link:hover {
+                background-color: rgba(37, 99, 235, 0.1);
+            }
+            
+            /* Form controls for mobile */
+            input.form-control, 
+            select.form-select,
+            textarea.form-control {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+    </style>
+    {% block additional_css %}{% endblock %}
+</head>
+<body>
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">TrainMate 🚆</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/plans">
+                            <span class="d-inline-flex align-items-center">
+                                My Plans <span class="ms-1 badge bg-primary rounded-pill" id="navPlansBadge"></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/how-it-works">How it Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/yourusername/trainmate" target="_blank">GitHub</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Common JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation plans badge
+            const navPlansBadge = document.getElementById('navPlansBadge');
+            if (navPlansBadge) {
+                const savedPlans = JSON.parse(localStorage.getItem('trainmateSavedPlans') || '[]');
+                if (savedPlans.length > 0) {
+                    navPlansBadge.textContent = savedPlans.length;
+                    navPlansBadge.style.display = 'inline';
+                } else {
+                    navPlansBadge.style.display = 'none';
+                }
+            }
+            
+            // Update plans badge when storage changes (e.g. from another tab)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'trainmateSavedPlans' && navPlansBadge) {
+                    const savedPlans = JSON.parse(localStorage.getItem('trainmateSavedPlans') || '[]');
+                    if (savedPlans.length > 0) {
+                        navPlansBadge.textContent = savedPlans.length;
+                        navPlansBadge.style.display = 'inline';
+                    } else {
+                        navPlansBadge.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

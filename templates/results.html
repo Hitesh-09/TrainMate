@@ -1,0 +1,894 @@
+{% extends "base.html" %}
+
+{% block title %}Train Results{% endblock %}
+
+{% block additional_css %}
+<style>
+    .results-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    /* Journey Header */
+    .journey-header {
+        background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        border-left: 5px solid var(--primary-color);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .journey-header h2 {
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 5px;
+    }
+    
+    /* Filters and Sorting Bar */
+    .filters-bar {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+    }
+    
+    .sort-label {
+        font-weight: 500;
+    }
+    
+    /* Section Dividers */
+    .section-divider {
+        display: flex;
+        align-items: center;
+        margin: 30px 0 20px;
+    }
+    
+    .divider-icon {
+        font-size: 1.5rem;
+        margin-right: 10px;
+    }
+    
+    .divider-text {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    /* Train Cards */
+    .train-card {
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 0;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+    }
+    
+    .train-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .train-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f8fafc;
+        padding: 15px 20px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .train-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .train-number {
+        font-size: 1rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+    
+    .train-card-body {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* Route Info */
+    .route-info {
+        display: flex;
+        align-items: center;
+        width: 70%;
+    }
+    
+    .station {
+        text-align: center;
+        width: 120px;
+    }
+    
+    /* Loading Overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(249, 250, 251, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        backdrop-filter: blur(5px);
+        animation: fadeOut 0.5s ease 1.5s forwards;
+    }
+    
+    .loading-content {
+        text-align: center;
+        max-width: 90%;
+    }
+    
+    .lottie-container {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+    }
+    
+    .loading-text {
+        margin-top: 20px;
+        color: var(--primary-color);
+        font-weight: 500;
+        animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; visibility: visible; }
+        to { opacity: 0; visibility: hidden; }
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+    }
+    
+    /* Map Container */
+    .map-container {
+        height: 300px;
+        margin: 20px 0;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+    }
+    
+    /* Tooltips */
+    .train-tooltip {
+        position: absolute;
+        display: none;
+        background-color: white;
+        border-radius: 6px;
+        padding: 10px 15px;
+        box-shadow: var(--shadow-md);
+        z-index: 100;
+        min-width: 200px;
+        border-left: 3px solid var(--primary-color);
+        font-size: 0.9rem;
+    }
+    
+    .tooltip-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .tooltip-body div {
+        margin-bottom: 5px;
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .train-card-body {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .route-info {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .availability-badge {
+            align-self: flex-start;
+        }
+        
+        .journey-option .segment .row {
+            flex-direction: column;
+        }
+        
+        .journey-option .segment .col-md-2 {
+            margin-top: 10px;
+            text-align: left;
+        }
+        
+        .filters-bar .row {
+            flex-direction: column;
+        }
+        
+        .filters-bar .col-md-6:last-child {
+            margin-top: 15px;
+            text-align: left !important;
+        }
+        
+        .lottie-container {
+            width: 150px;
+            height: 150px;
+        }
+        
+        .map-container {
+            height: 250px;
+        }
+    }
+    
+    .station-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+    
+    .time {
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+    
+    .journey-line {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        margin: 0 15px;
+        position: relative;
+    }
+    
+    .journey-path {
+        height: 3px;
+        background-color: #cbd5e1;
+        width: 100%;
+    }
+    
+    .journey-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        position: absolute;
+    }
+    
+    .journey-dot.start {
+        background-color: var(--primary-color);
+        left: 0;
+    }
+    
+    .journey-dot.end {
+        background-color: #ef4444;
+        right: 0;
+    }
+    
+    /* Availability Badge */
+    .availability-badge {
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .availability-badge.available {
+        background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        color: var(--accent-green);
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+    }
+    
+    .availability-badge.waitlist {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        color: var(--accent-red);
+        box-shadow: 0 2px 8px rgba(244, 63, 94, 0.2);
+    }
+    
+    .availability-badge .icon {
+        margin-right: 5px;
+    }
+    
+    /* Alternate Routes */
+    .alternate-route {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-left: 3px solid #64748b;
+        transition: all 0.2s ease;
+    }
+    
+    .alternate-route:hover {
+        background-color: #f1f5f9;
+        transform: translateX(5px);
+    }
+    
+    /* Break Journeys */
+    .break-journeys {
+        margin-top: 20px;
+    }
+    
+    .journey-option {
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 0;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .journey-option:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    
+    .segment {
+        padding: 15px;
+        position: relative;
+    }
+    
+    .segment:first-child {
+        border-bottom: 1px dashed #e2e8f0;
+    }
+    
+    .segment:first-child:after {
+        content: "↓";
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        border-radius: 50%;
+        box-shadow: 0 0 0 5px white;
+        z-index: 1;
+        color: var(--primary-color);
+    }
+    
+    /* Back button */
+    .back-button {
+        margin-top: 30px;
+    }
+    
+    /* Button styling */
+    .btn-primary {
+        background: var(--gradient-primary);
+        border: none;
+        box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+        filter: brightness(1.05);
+    }
+    
+    .btn-success {
+        background: var(--gradient-success);
+        border: none;
+        box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(34, 197, 94, 0.3);
+        filter: brightness(1.05);
+    }
+    
+    /* Journey Actions */
+    .journey-actions {
+        border-top: 1px dashed #e2e8f0;
+    }
+    
+    .plan-journey-btn {
+        transition: all 0.3s ease;
+    }
+    
+    .plan-journey-btn:hover {
+        transform: translateY(-2px);
+    }
+    
+    /* Modal Styling */
+    .journey-overview {
+        background-color: #f0f9ff;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .connection-info {
+        height: 40px;
+    }
+    
+    .connection-line {
+        position: absolute;
+        height: 2px;
+        background-color: #e2e8f0;
+        top: 50%;
+        left: 20%;
+        right: 20%;
+    }
+    
+    .connection-badge {
+        position: relative;
+        display: inline-block;
+        background-color: white;
+        padding: 0 10px;
+    }
+    
+    .segment-card {
+        transition: all 0.3s ease;
+    }
+    
+    .segment-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* Saved journeys section */
+    .saved-journeys {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 100;
+    }
+    
+    .saved-counter {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #dc3545;
+        color: white;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Loading Overlay -->
+<div id="loading-overlay" class="loading-overlay">
+  <div class="loading-content">
+    <div id="lottie-loading" class="lottie-container"></div>
+    <h3 class="loading-text">Finding the best routes for you...</h3>
+  </div>
+</div>
+
+<div class="results-container">
+  <div class="journey-header">
+    <h2>{{source}} to {{destination}}</h2>
+    <p class="text-muted">Journey Date: {{date}}</p>
+  </div>
+  
+  <!-- Map Visualization -->
+  <div class="map-container" id="india-railway-map">
+    <span id="source-station-name" style="display: none;">{{source}}</span>
+    <span id="dest-station-name" style="display: none;">{{destination}}</span>
+  </div>
+  
+  <!-- Filter and Sort Bar -->
+  <div class="filters-bar mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-2 mb-md-0">
+        <div class="d-flex align-items-center">
+          <label class="me-2 sort-label">Sort by:</label>
+          <select class="form-select" id="sort-options">
+            <option value="default">Recommended</option>
+            <option value="earliest">Earliest Departure</option>
+            <option value="waitlist">Shortest Waitlist</option>
+            <option value="stops">Fewest Stops</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="available-only">
+          <label class="form-check-label" for="available-only">
+            Show only available trains
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if matched_trains %}
+    <!-- Direct Trains Section -->
+    <div class="section-divider">
+      <span class="divider-icon">🚄</span>
+      <h3 class="divider-text">Direct Trains</h3>
+    </div>
+    <div class="direct-trains">
+      {% for train in matched_trains %}
+        <div class="train-card" data-train-no="{{ train.train_no }}" data-train-name="{{ train.train_name }}">
+          <div class="train-card-header">
+            <h4 class="train-name">{{ train.train_name }}</h4>
+            <span class="train-number">{{ train.train_no }}</span>
+          </div>
+          <div class="train-card-body">
+            <div class="route-info">
+              <div class="station">
+                <div class="station-name">{{ train.from }}</div>
+                <div class="time">06:30</div>
+              </div>
+              <div class="journey-line">
+                <span class="journey-dot start"></span>
+                <span class="journey-path"></span>
+                <span class="journey-dot end"></span>
+              </div>
+              <div class="station">
+                <div class="station-name">{{ train.to }}</div>
+                <div class="time">14:45</div>
+              </div>
+            </div>
+            <div class="availability-badge {% if 'WL' in train.availability %}waitlist{% else %}available{% endif %}">
+              {% if 'WL' in train.availability %}
+                <span class="icon">🔴</span> {{ train.availability }}
+              {% else %}
+                <span class="icon">🟢</span> {{ train.availability }}
+              {% endif %}
+            </div>
+          </div>
+          <!-- Hidden tooltip content -->
+          <div class="train-tooltip" id="tooltip-{{ train.train_no }}">
+            <div class="tooltip-header">
+              <strong>{{ train.train_name }}</strong>
+              <span class="text-muted">#{{ train.train_no }}</span>
+            </div>
+            <div class="tooltip-body">
+              <div><strong>Runtime:</strong> 8 hrs 15 mins</div>
+              <div><strong>Distance:</strong> 495 km</div>
+              <div><strong>Stops:</strong> 12 stations</div>
+              <div><strong>Days:</strong> Daily except Sunday</div>
+              <div><strong>Fare:</strong> ₹550 - ₹1200</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">No direct trains found for this route.</div>
+  {% endif %}
+
+  {% if suggestions %}
+    <!-- Alternate Routes Section -->
+    <div class="section-divider">
+      <span class="divider-icon">🔄</span>
+      <h3 class="divider-text">Alternate Source Options</h3>
+    </div>
+    <div class="alternate-routes">
+      {% for train in suggestions %}
+        <div class="train-card">
+          <div class="train-card-header">
+            <h4 class="train-name">{{ train.train_name }}</h4>
+            <span class="train-number">{{ train.train_no }}</span>
+          </div>
+          <div class="train-card-body">
+            <div class="route-info">
+              <div class="station">
+                <div class="station-name">{{ train.from }}</div>
+                <div class="time">08:15</div>
+              </div>
+              <div class="journey-line">
+                <span class="journey-dot start"></span>
+                <span class="journey-path"></span>
+                <span class="journey-dot end"></span>
+              </div>
+              <div class="station">
+                <div class="station-name">{{ train.to }}</div>
+                <div class="time">16:30</div>
+              </div>
+            </div>
+            <div class="availability-badge {% if 'WL' in train.availability %}waitlist{% else %}available{% endif %}">
+              {% if 'WL' in train.availability %}
+                <span class="icon">🔴</span> {{ train.availability }}
+              {% else %}
+                <span class="icon">🟢</span> {{ train.availability }}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if break_journeys %}
+    <!-- Break Journey Options Section -->
+    <div class="section-divider">
+      <span class="divider-icon">🧭</span>
+      <h3 class="divider-text">Break Journey Options</h3>
+    </div>
+    <p>No direct trains are available, but you can reach your destination with these connecting trains:</p>
+    <div class="break-journeys">
+      {% for journey in break_journeys %}
+        <div class="journey-option">
+          <div class="segment">
+            <div class="row">
+              <div class="col-md-10">
+                <h5>{{ journey[0].train_no }} - {{ journey[0].train_name }}</h5>
+                <p>{{ journey[0].from }} → {{ journey[0].to }}</p>
+              </div>
+              <div class="col-md-2 text-end">
+                <div class="availability-badge {% if 'WL' in journey[0].availability %}waitlist{% else %}available{% endif %}">
+                  {% if 'WL' in journey[0].availability %}
+                    <span class="icon">🔴</span> {{ journey[0].availability }}
+                  {% else %}
+                    <span class="icon">🟢</span> {{ journey[0].availability }}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="segment">
+            <div class="row">
+              <div class="col-md-10">
+                <h5>{{ journey[1].train_no }} - {{ journey[1].train_name }}</h5>
+                <p>{{ journey[1].from }} → {{ journey[1].to }}</p>
+              </div>
+              <div class="col-md-2 text-end">
+                <div class="availability-badge {% if 'WL' in journey[1].availability %}waitlist{% else %}available{% endif %}">
+                  {% if 'WL' in journey[1].availability %}
+                    <span class="icon">🔴</span> {{ journey[1].availability }}
+                  {% else %}
+                    <span class="icon">🟢</span> {{ journey[1].availability }}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="journey-actions text-center p-3 bg-light">
+            <button class="btn btn-primary plan-journey-btn" data-bs-toggle="modal" data-bs-target="#planJourneyModal" 
+                    data-journey-index="{{ loop.index0 }}">
+              <i class="bi bi-calendar-plus me-1"></i> Plan This Journey
+            </button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="text-center back-button">
+    <a href="/" class="btn btn-primary">Search Another Route</a>
+  </div>
+  
+  <!-- Plan Journey Modal -->
+  <div class="modal fade" id="planJourneyModal" tabindex="-1" aria-labelledby="planJourneyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background: var(--gradient-primary);">
+          <h5 class="modal-title" id="planJourneyModalLabel">Plan Your Journey</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="journey-summary">
+            <h4 class="mb-3">Journey Summary</h4>
+            <div class="journey-overview p-3 mb-4 bg-light rounded">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <div class="route-stations">
+                    <span id="modal-source" class="h5">Source</span> → 
+                    <span id="modal-via" class="text-muted">Via</span> → 
+                    <span id="modal-destination" class="h5">Destination</span>
+                  </div>
+                  <div class="date mt-2">
+                    <strong>Date:</strong> <span id="modal-date">{{ date }}</span>
+                  </div>
+                </div>
+                <div class="journey-price">
+                  <div class="badge bg-success fs-6 p-2">Best Option</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="segments">
+              <div class="segment-card bg-white p-3 mb-3 border rounded">
+                <h5 class="segment-title border-bottom pb-2">First Leg</h5>
+                <div class="row mt-3">
+                  <div class="col-md-6">
+                    <div><strong>Train:</strong> <span id="modal-train1-name">Train Name</span></div>
+                    <div><strong>Train No:</strong> <span id="modal-train1-no">00000</span></div>
+                    <div><strong>From:</strong> <span id="modal-train1-from">Source</span></div>
+                    <div><strong>To:</strong> <span id="modal-train1-to">Intermediate</span></div>
+                  </div>
+                  <div class="col-md-6">
+                    <div><strong>Departure:</strong> 06:30</div>
+                    <div><strong>Arrival:</strong> 12:45</div>
+                    <div class="mt-2">
+                      <strong>Availability:</strong> <span id="modal-train1-availability" class="badge bg-success">Available</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="connection-info text-center position-relative my-4">
+                <div class="connection-line"></div>
+                <div class="connection-badge">
+                  <span class="badge bg-warning text-dark p-2">Connection: 1.5 hrs at <span id="modal-connection-station">Station</span></span>
+                </div>
+              </div>
+              
+              <div class="segment-card bg-white p-3 mb-3 border rounded">
+                <h5 class="segment-title border-bottom pb-2">Second Leg</h5>
+                <div class="row mt-3">
+                  <div class="col-md-6">
+                    <div><strong>Train:</strong> <span id="modal-train2-name">Train Name</span></div>
+                    <div><strong>Train No:</strong> <span id="modal-train2-no">00000</span></div>
+                    <div><strong>From:</strong> <span id="modal-train2-from">Intermediate</span></div>
+                    <div><strong>To:</strong> <span id="modal-train2-to">Destination</span></div>
+                  </div>
+                  <div class="col-md-6">
+                    <div><strong>Departure:</strong> 14:15</div>
+                    <div><strong>Arrival:</strong> 20:30</div>
+                    <div class="mt-2">
+                      <strong>Availability:</strong> <span id="modal-train2-availability" class="badge bg-success">Available</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="journey-notes mt-4">
+              <div class="form-floating">
+                <textarea class="form-control" id="journeyNotes" style="height: 100px"></textarea>
+                <label for="journeyNotes">Add notes about this journey</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" id="saveJourneyBtn">
+            <i class="bi bi-bookmark-plus me-1"></i> Save to My Plans
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Saved Plans Toast Notification -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="saveJourneyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header bg-success text-white">
+        <strong class="me-auto">Success</strong>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Journey added to your saved plans!
+      </div>
+    </div>
+  </div>
+  
+  <!-- View Saved Journeys Button -->
+  <div class="saved-journeys">
+    <button class="btn btn-success btn-lg rounded-circle p-3" 
+            data-bs-toggle="modal" 
+            data-bs-target="#savedJourneysModal" 
+            id="viewSavedJourneysBtn">
+      <i class="bi bi-bookmark-fill"></i>
+      <div class="saved-counter" id="savedCounter">0</div>
+    </button>
+  </div>
+  
+  <!-- Saved Journeys Modal -->
+  <div class="modal fade" id="savedJourneysModal" tabindex="-1" aria-labelledby="savedJourneysModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background: var(--gradient-success);">
+          <h5 class="modal-title" id="savedJourneysModalLabel">Your Saved Journey Plans</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="savedJourneysList">
+            <div class="text-center py-5 text-muted" id="noSavedJourneys">
+              <i class="bi bi-bookmark-x fs-1"></i>
+              <p class="mt-3">You haven't saved any journeys yet.</p>
+            </div>
+            <!-- Saved journeys will be added here dynamically -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" id="clearAllPlansBtn">Clear All Plans</button>
+          <a href="/plans" class="btn btn-primary">View Full Itineraries</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips for train cards
+    const trainCards = document.querySelectorAll('.train-card');
+    
+    trainCards.forEach(card => {
+      const trainNo = card.getAttribute('data-train-no');
+      const tooltip = document.getElementById(`tooltip-${trainNo}`);
+      
+      if (!tooltip) return;
+      
+      // Show tooltip on hover
+      card.addEventListener('mouseenter', function(e) {
+        const rect = card.getBoundingClientRect();
+        tooltip.style.display = 'block';
+        tooltip.style.top = `${rect.bottom + window.scrollY + 10}px`;
+        tooltip.style.left = `${rect.left + window.scrollX}px`;
+      });
+      
+      // Hide tooltip when mouse leaves
+      card.addEventListener('mouseleave', function() {
+        tooltip.style.display = 'none';
+      });
+    });
+    
+    // Sort and filter functionality
+    const sortOptions = document.getElementById('sort-options');
+    const availableOnly = document.getElementById('available-only');
+    
+    if (availableOnly) {
+      availableOnly.addEventListener('change', function() {
+        const showOnlyAvailable = this.checked;
+        
+        document.querySelectorAll('.availability-badge').forEach(badge => {
+          const card = badge.closest('.train-card, .journey-option');
+          
+          if (showOnlyAvailable && badge.classList.contains('waitlist')) {
+            card.style.display = 'none';
+          } else {
+            card.style.display = '';
+          }
+        });
+      });
+    }
+    
+    if (sortOptions) {
+      sortOptions.addEventListener('change', function() {
+        // Implemented for demonstration only
+        console.log('Sorting by:', this.value);
+      });
+    }
+    
+    // Hide loading overlay after a short delay
+    setTimeout(() => {
+      const loadingOverlay = document.getElementById('loading-overlay');
+      if (loadingOverlay) {
+        loadingOverlay.style.display = 'none';
+      }
+    }, 2000);
+  });
+</script>
+
+<!-- Include the map and Lottie animations -->
+<script src="/static/js/map.js"></script>
+<script src="/static/js/lottie-loader.js"></script>
+{% endblock %}
