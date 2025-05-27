@@ -464,10 +464,10 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background-color: #dc3545;
+        background-color: var(--accent-red);
         color: white;
         font-size: 12px;
-        display: flex;
+        display: none; /* Hidden by default, shown when there are saved plans */
         align-items: center;
         justify-content: center;
     }
@@ -666,7 +666,20 @@
           </div>
           <div class="journey-actions text-center p-3 bg-light">
             <button class="btn btn-primary plan-journey-btn" data-bs-toggle="modal" data-bs-target="#planJourneyModal" 
-                    data-journey-index="{{ loop.index0 }}">
+                    data-journey-index="{{ loop.index0 }}"
+                    data-source="{{ journey[0].from }}"
+                    data-via="{{ journey[0].to }}"
+                    data-destination="{{ journey[1].to }}"
+                    data-leg1-train-no="{{ journey[0].train_no }}"
+                    data-leg1-train-name="{{ journey[0].train_name }}"
+                    data-leg1-from="{{ journey[0].from }}"
+                    data-leg1-to="{{ journey[0].to }}"
+                    data-leg1-availability="{{ journey[0].availability }}"
+                    data-leg2-train-no="{{ journey[1].train_no }}"
+                    data-leg2-train-name="{{ journey[1].train_name }}"
+                    data-leg2-from="{{ journey[1].from }}"
+                    data-leg2-to="{{ journey[1].to }}"
+                    data-leg2-availability="{{ journey[1].availability }}">
               <i class="bi bi-calendar-plus me-1"></i> Plan This Journey
             </button>
           </div>
@@ -851,6 +864,145 @@
       });
     });
     
+    // Break journey data for saving to plans
+    const breakJourneyData = [];
+    
+    {% if break_journeys %}
+      {% for journey in break_journeys %}
+        breakJourneyData.push({
+          leg1: {
+            trainNo: "{{ journey[0].train_no }}",
+            trainName: "{{ journey[0].train_name }}",
+            from: "{{ journey[0].from }}",
+            to: "{{ journey[0].to }}",
+            availability: "{{ journey[0].availability }}"
+          },
+          leg2: {
+            trainNo: "{{ journey[1].train_no }}",
+            trainName: "{{ journey[1].train_name }}",
+            from: "{{ journey[1].from }}",
+            to: "{{ journey[1].to }}",
+            availability: "{{ journey[1].availability }}"
+          }
+        });
+      {% endfor %}
+    {% endif %}
+    
+    // Initialize saved plans
+    let savedPlans = JSON.parse(localStorage.getItem('trainmateSavedPlans') || '[]');
+    
+    // Plan Journey Modal Functionality
+    const planJourneyModal = document.getElementById('planJourneyModal');
+    const saveJourneyBtn = document.getElementById('saveJourneyBtn');
+    const saveJourneyToast = document.getElementById('saveJourneyToast');
+    const savedCounter = document.getElementById('savedCounter');
+    
+    // Update saved counter badge
+    function updateSavedCounter() {
+      if (savedCounter) {
+        savedCounter.textContent = savedPlans.length;
+        if (savedPlans.length > 0) {
+          savedCounter.style.display = 'flex';
+        } else {
+          savedCounter.style.display = 'none';
+        }
+      }
+    }
+    
+    // Initialize counter
+    updateSavedCounter();
+    
+    // Setup modal data when opened
+    if (planJourneyModal) {
+      planJourneyModal.addEventListener('show.bs.modal', function(event) {
+        // Get journey index from button that triggered modal
+        const button = event.relatedTarget;
+        const journeyIndex = parseInt(button.getAttribute('data-journey-index'));
+        const journeyData = breakJourneyData[journeyIndex];
+        
+        if (journeyData) {
+          // Populate journey overview
+          document.getElementById('modal-source').textContent = journeyData.leg1.from;
+          document.getElementById('modal-via').textContent = journeyData.leg1.to;
+          document.getElementById('modal-destination').textContent = journeyData.leg2.to;
+          document.getElementById('modal-connection-station').textContent = journeyData.leg1.to;
+          
+          // Populate first leg
+          document.getElementById('modal-train1-name').textContent = journeyData.leg1.trainName;
+          document.getElementById('modal-train1-no').textContent = journeyData.leg1.trainNo;
+          document.getElementById('modal-train1-from').textContent = journeyData.leg1.from;
+          document.getElementById('modal-train1-to').textContent = journeyData.leg1.to;
+          
+          // Set availability badge for first leg
+          const train1Badge = document.getElementById('modal-train1-availability');
+          train1Badge.textContent = journeyData.leg1.availability;
+          if (journeyData.leg1.availability.includes('WL')) {
+            train1Badge.className = 'badge bg-danger';
+          } else {
+            train1Badge.className = 'badge bg-success';
+          }
+          
+          // Populate second leg
+          document.getElementById('modal-train2-name').textContent = journeyData.leg2.trainName;
+          document.getElementById('modal-train2-no').textContent = journeyData.leg2.trainNo;
+          document.getElementById('modal-train2-from').textContent = journeyData.leg2.from;
+          document.getElementById('modal-train2-to').textContent = journeyData.leg2.to;
+          
+          // Set availability badge for second leg
+          const train2Badge = document.getElementById('modal-train2-availability');
+          train2Badge.textContent = journeyData.leg2.availability;
+          if (journeyData.leg2.availability.includes('WL')) {
+            train2Badge.className = 'badge bg-danger';
+          } else {
+            train2Badge.className = 'badge bg-success';
+          }
+          
+          // Store journey index for saving
+          saveJourneyBtn.setAttribute('data-journey-index', journeyIndex);
+        }
+      });
+    }
+    
+    // Save journey to local storage
+    if (saveJourneyBtn) {
+      saveJourneyBtn.addEventListener('click', function() {
+        const journeyIndex = parseInt(this.getAttribute('data-journey-index'));
+        const journeyData = breakJourneyData[journeyIndex];
+        const notes = document.getElementById('journeyNotes').value;
+        
+        if (journeyData) {
+          // Create a plan object
+          const plan = {
+            id: Date.now(),
+            date: "{{ date }}",
+            source: journeyData.leg1.from,
+            via: journeyData.leg1.to,
+            destination: journeyData.leg2.to,
+            legs: [journeyData.leg1, journeyData.leg2],
+            notes: notes,
+            savedAt: new Date().toISOString()
+          };
+          
+          // Add to saved plans
+          savedPlans.push(plan);
+          localStorage.setItem('trainmateSavedPlans', JSON.stringify(savedPlans));
+          
+          // Update counter
+          updateSavedCounter();
+          
+          // Show toast notification
+          const toastElement = new bootstrap.Toast(saveJourneyToast);
+          toastElement.show();
+          
+          // Close modal after a short delay
+          setTimeout(() => {
+            const modalInstance = bootstrap.Modal.getInstance(planJourneyModal);
+            modalInstance.hide();
+          }, 1500);
+        }
+      });
+    }
+    
     // Sort and filter functionality
     const sortOptions = document.getElementById('sort-options');
     const availableOnly = document.getElementById('available-only');
@@ -888,7 +1040,8 @@
   });
 </script>
 
-<!-- Include the map and Lottie animations -->
+<!-- Include the map, Lottie animations, and journey planner -->
 <script src="/static/js/map.js"></script>
 <script src="/static/js/lottie-loader.js"></script>
+<script src="/static/js/journey-planner.js"></script>
 {% endblock %}
