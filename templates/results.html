@@ -475,6 +475,20 @@
 {% endblock %}
 
 {% block content %}
+<!-- Debug Information -->
+<div class="alert alert-info mb-4">
+  <h5>Debug Information:</h5>
+  <ul>
+    <li><strong>Source:</strong> {{ source }}</li>
+    <li><strong>Source Code:</strong> {{ matched_trains[0].from if matched_trains else 'N/A' }}</li>
+    <li><strong>Destination:</strong> {{ destination }}</li>
+    <li><strong>Destination Code:</strong> {{ matched_trains[0].to if matched_trains else 'N/A' }}</li>
+    <li><strong>Date:</strong> {{ date }}</li>
+    <li><strong>Direct Trains Found:</strong> {{ matched_trains|length }}</li>
+    <li><strong>Break Journeys Found:</strong> {{ break_journeys|length }}</li>
+  </ul>
+</div>
+
 <!-- Loading Overlay -->
 <div id="loading-overlay" class="loading-overlay">
   <div class="loading-content">
@@ -487,6 +501,17 @@
   <div class="journey-header">
     <h2>{{source}} to {{destination}}</h2>
     <p class="text-muted">Journey Date: {{date}}</p>
+    
+    <!-- Debug Information (hidden in production) -->
+    <div class="alert alert-info mt-3">
+      <h6>Debug Information:</h6>
+      <ul class="mb-0">
+        <li><strong>Source Code:</strong> {% if matched_trains %}{{ matched_trains[0].from }}{% else %}{{ source }}{% endif %}</li>
+        <li><strong>Destination Code:</strong> {% if matched_trains %}{{ matched_trains[0].to }}{% else %}{{ destination }}{% endif %}</li>
+        <li><strong>Direct Trains Found:</strong> {{ matched_trains|length }}</li>
+        <li><strong>Break Journeys Found:</strong> {{ break_journeys|length }}</li>
+      </ul>
+    </div>
   </div>
   
   <!-- Map Visualization -->
@@ -528,16 +553,16 @@
     </div>
     <div class="direct-trains">
       {% for train in matched_trains %}
-        <div class="train-card" data-train-no="{{ train.train_no }}" data-train-name="{{ train.train_name }}">
+        <div class="train-card" data-train-no="{{ train.train_number }}" data-train-name="{{ train.name }}">
           <div class="train-card-header">
-            <h4 class="train-name">{{ train.train_name }}</h4>
-            <span class="train-number">{{ train.train_no }}</span>
+            <h4 class="train-name">{{ train.name }}</h4>
+            <span class="train-number">{{ train.train_number }}</span>
           </div>
           <div class="train-card-body">
             <div class="route-info">
               <div class="station">
-                <div class="station-name">{{ train.from }}</div>
-                <div class="time">06:30</div>
+                <div class="station-name">{{ train.from_name }}</div>
+                <div class="time">{{ train.departure }}</div>
               </div>
               <div class="journey-line">
                 <span class="journey-dot start"></span>
@@ -545,30 +570,32 @@
                 <span class="journey-dot end"></span>
               </div>
               <div class="station">
-                <div class="station-name">{{ train.to }}</div>
-                <div class="time">14:45</div>
+                <div class="station-name">{{ train.to_name }}</div>
+                <div class="time">{{ train.arrival|default('---') }}</div>
               </div>
             </div>
-            <div class="availability-badge {% if 'WL' in train.availability %}waitlist{% else %}available{% endif %}">
-              {% if 'WL' in train.availability %}
-                <span class="icon">🔴</span> {{ train.availability }}
+            <div class="availability-badge {% if 'WL' in train.availability_status %}waitlist{% else %}available{% endif %}">
+              {% if 'WL' in train.availability_status %}
+                <span class="icon">🔴</span> {{ train.availability_status }}
               {% else %}
-                <span class="icon">🟢</span> {{ train.availability }}
+                <span class="icon">🟢</span> {{ train.availability_status }}
               {% endif %}
             </div>
           </div>
           <!-- Hidden tooltip content -->
-          <div class="train-tooltip" id="tooltip-{{ train.train_no }}">
+          <div class="train-tooltip" id="tooltip-{{ train.train_number }}">
             <div class="tooltip-header">
-              <strong>{{ train.train_name }}</strong>
-              <span class="text-muted">#{{ train.train_no }}</span>
+              <strong>{{ train.name }}</strong>
+              <span class="text-muted">#{{ train.train_number }}</span>
             </div>
             <div class="tooltip-body">
-              <div><strong>Runtime:</strong> 8 hrs 15 mins</div>
-              <div><strong>Distance:</strong> 495 km</div>
-              <div><strong>Stops:</strong> 12 stations</div>
-              <div><strong>Days:</strong> Daily except Sunday</div>
-              <div><strong>Fare:</strong> ₹550 - ₹1200</div>
+              <div><strong>Departure:</strong> {{ train.departure }}</div>
+              {% if train.arrival %}
+                <div><strong>Arrival:</strong> {{ train.arrival }}</div>
+              {% endif %}
+              <div><strong>Classes:</strong> {{ train.classes|join(', ') if train.classes else 'SL, 3A, 2A' }}</div>
+              <div><strong>Runs on:</strong> {{ train.days|join(', ') if train.days else 'All days' }}</div>
+              <div><strong>Stops:</strong> {{ train.stops|length if train.stops else 'Multiple' }}</div>
             </div>
           </div>
         </div>
@@ -588,14 +615,14 @@
       {% for train in suggestions %}
         <div class="train-card">
           <div class="train-card-header">
-            <h4 class="train-name">{{ train.train_name }}</h4>
-            <span class="train-number">{{ train.train_no }}</span>
+            <h4 class="train-name">{{ train.name }}</h4>
+            <span class="train-number">{{ train.train_number }}</span>
           </div>
           <div class="train-card-body">
             <div class="route-info">
               <div class="station">
-                <div class="station-name">{{ train.from }}</div>
-                <div class="time">08:15</div>
+                <div class="station-name">{{ train.from_name }}</div>
+                <div class="time">{{ train.departure }}</div>
               </div>
               <div class="journey-line">
                 <span class="journey-dot start"></span>
@@ -603,15 +630,15 @@
                 <span class="journey-dot end"></span>
               </div>
               <div class="station">
-                <div class="station-name">{{ train.to }}</div>
-                <div class="time">16:30</div>
+                <div class="station-name">{{ train.to_name }}</div>
+                <div class="time">{{ train.arrival|default('---') }}</div>
               </div>
             </div>
-            <div class="availability-badge {% if 'WL' in train.availability %}waitlist{% else %}available{% endif %}">
-              {% if 'WL' in train.availability %}
-                <span class="icon">🔴</span> {{ train.availability }}
+            <div class="availability-badge {% if 'WL' in train.availability_status %}waitlist{% else %}available{% endif %}">
+              {% if 'WL' in train.availability_status %}
+                <span class="icon">🔴</span> {{ train.availability_status }}
               {% else %}
-                <span class="icon">🟢</span> {{ train.availability }}
+                <span class="icon">🟢</span> {{ train.availability_status }}
               {% endif %}
             </div>
           </div>
@@ -633,15 +660,15 @@
           <div class="segment">
             <div class="row">
               <div class="col-md-10">
-                <h5>{{ journey[0].train_no }} - {{ journey[0].train_name }}</h5>
-                <p>{{ journey[0].from }} → {{ journey[0].to }}</p>
+                <h5>{{ journey.first_leg.train_number }} - {{ journey.first_leg.name }}</h5>
+                <p>{{ journey.first_leg.from_name }} → {{ journey.first_leg.to_name }}</p>
               </div>
               <div class="col-md-2 text-end">
-                <div class="availability-badge {% if 'WL' in journey[0].availability %}waitlist{% else %}available{% endif %}">
-                  {% if 'WL' in journey[0].availability %}
-                    <span class="icon">🔴</span> {{ journey[0].availability }}
+                <div class="availability-badge {% if 'WL' in journey.first_leg.availability %}waitlist{% else %}available{% endif %}">
+                  {% if 'WL' in journey.first_leg.availability %}
+                    <span class="icon">🔴</span> {{ journey.first_leg.availability }}
                   {% else %}
-                    <span class="icon">🟢</span> {{ journey[0].availability }}
+                    <span class="icon">🟢</span> {{ journey.first_leg.availability }}
                   {% endif %}
                 </div>
               </div>
@@ -650,15 +677,15 @@
           <div class="segment">
             <div class="row">
               <div class="col-md-10">
-                <h5>{{ journey[1].train_no }} - {{ journey[1].train_name }}</h5>
-                <p>{{ journey[1].from }} → {{ journey[1].to }}</p>
+                <h5>{{ journey.second_leg.train_number }} - {{ journey.second_leg.name }}</h5>
+                <p>{{ journey.second_leg.from_name }} → {{ journey.second_leg.to_name }}</p>
               </div>
               <div class="col-md-2 text-end">
-                <div class="availability-badge {% if 'WL' in journey[1].availability %}waitlist{% else %}available{% endif %}">
-                  {% if 'WL' in journey[1].availability %}
-                    <span class="icon">🔴</span> {{ journey[1].availability }}
+                <div class="availability-badge {% if 'WL' in journey.second_leg.availability %}waitlist{% else %}available{% endif %}">
+                  {% if 'WL' in journey.second_leg.availability %}
+                    <span class="icon">🔴</span> {{ journey.second_leg.availability }}
                   {% else %}
-                    <span class="icon">🟢</span> {{ journey[1].availability }}
+                    <span class="icon">🟢</span> {{ journey.second_leg.availability }}
                   {% endif %}
                 </div>
               </div>
@@ -667,19 +694,19 @@
           <div class="journey-actions text-center p-3 bg-light">
             <button class="btn btn-primary plan-journey-btn" data-bs-toggle="modal" data-bs-target="#planJourneyModal" 
                     data-journey-index="{{ loop.index0 }}"
-                    data-source="{{ journey[0].from }}"
-                    data-via="{{ journey[0].to }}"
-                    data-destination="{{ journey[1].to }}"
-                    data-leg1-train-no="{{ journey[0].train_no }}"
-                    data-leg1-train-name="{{ journey[0].train_name }}"
-                    data-leg1-from="{{ journey[0].from }}"
-                    data-leg1-to="{{ journey[0].to }}"
-                    data-leg1-availability="{{ journey[0].availability }}"
-                    data-leg2-train-no="{{ journey[1].train_no }}"
-                    data-leg2-train-name="{{ journey[1].train_name }}"
-                    data-leg2-from="{{ journey[1].from }}"
-                    data-leg2-to="{{ journey[1].to }}"
-                    data-leg2-availability="{{ journey[1].availability }}">
+                    data-source="{{ journey.first_leg.from_name }}"
+                    data-via="{{ journey.via_name }}"
+                    data-destination="{{ journey.second_leg.to_name }}"
+                    data-leg1-train-no="{{ journey.first_leg.train_number }}"
+                    data-leg1-train-name="{{ journey.first_leg.name }}"
+                    data-leg1-from="{{ journey.first_leg.from_name }}"
+                    data-leg1-to="{{ journey.first_leg.to_name }}"
+                    data-leg1-availability="{{ journey.first_leg.availability }}"
+                    data-leg2-train-no="{{ journey.second_leg.train_number }}"
+                    data-leg2-train-name="{{ journey.second_leg.name }}"
+                    data-leg2-from="{{ journey.second_leg.from_name }}"
+                    data-leg2-to="{{ journey.second_leg.to_name }}"
+                    data-leg2-availability="{{ journey.second_leg.availability }}">
               <i class="bi bi-calendar-plus me-1"></i> Plan This Journey
             </button>
           </div>

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Debug Data{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Debug Data</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0">Search Parameters</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Source:</strong> {{ source }}</p>
+            <p><strong>Destination:</strong> {{ destination }}</p>
+            <p><strong>Date:</strong> {{ date }}</p>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h2 class="h5 mb-0">Stations Sample ({{ stations|length }} loaded)</h2>
+        </div>
+        <div class="card-body">
+            <pre>{{ stations|tojson(indent=2)|safe }}</pre>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h2 class="h5 mb-0">Trains Sample ({{ trains|length }} loaded)</h2>
+        </div>
+        <div class="card-body">
+            <pre>{{ trains|tojson(indent=2)|safe }}</pre>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2 class="h5 mb-0">Direct Trains ({{ direct_trains|length }})</h2>
+        </div>
+        <div class="card-body">
+            {% if direct_trains %}
+                <pre>{{ direct_trains|tojson(indent=2)|safe }}</pre>
+            {% else %}
+                <p class="text-danger">No direct trains found</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2 class="h5 mb-0">Break Journeys ({{ break_journeys|length }})</h2>
+        </div>
+        <div class="card-body">
+            {% if break_journeys %}
+                <pre>{{ break_journeys|tojson(indent=2)|safe }}</pre>
+            {% else %}
+                <p class="text-danger">No break journeys found</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

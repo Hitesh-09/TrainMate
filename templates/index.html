@@ -199,7 +199,11 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/autocomplete.js"></script>
 <script>
+  // Station data from server
+  window.stationData = {{ stations|tojson|safe }};
+  
   function validateForm() {
     console.log("Validating form...");
     
@@ -225,8 +229,6 @@
       isValid = false;
     }
     
-    console.log("Form is valid:", isValid);
-    
     if (!isValid) {
       alert("Please fill in all required fields");
     }
@@ -234,7 +236,30 @@
     return isValid;
   }
   
+  // Setup autocomplete functionality
   document.addEventListener('DOMContentLoaded', function() {
+    const sourceInput = document.getElementById('source');
+    const destInput = document.getElementById('destination');
+    
+    if (stationData && sourceInput && destInput) {
+      // Create station name array for autocomplete
+      const stationNames = stationData.map(station => station.name);
+      
+      // Setup autocomplete for source field
+      new Autocomplete(sourceInput, {
+        data: stationNames,
+        maximumItems: 7,
+        threshold: 2
+      });
+      
+      // Setup autocomplete for destination field
+      new Autocomplete(destInput, {
+        data: stationNames,
+        maximumItems: 7,
+        threshold: 2
+      });
+    }
+    
     // Reset border color on focus
     ['source', 'destination', 'date'].forEach(fieldId => {
       const field = document.getElementById(fieldId);
@@ -244,6 +269,21 @@
         });
       }
     });
+    
+    // Set minimum date to today
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      let mm = today.getMonth() + 1;
+      let dd = today.getDate();
+
+      if (dd < 10) dd = '0' + dd;
+      if (mm < 10) mm = '0' + mm;
+
+      const formattedToday = yyyy + '-' + mm + '-' + dd;
+      dateInput.min = formattedToday;
+    }
   });
 </script>
 {% endblock %}

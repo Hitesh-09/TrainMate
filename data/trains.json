@@ -1,0 +1,616 @@
+[
+  {
+    "train_number": "12951",
+    "name": "Mumbai Rajdhani",
+    "from": "NDLS",
+    "to": "BCT",
+    "stops": ["MTJ", "KOTA", "BRC"],
+    "departure": "16:25",
+    "arrival": "08:15",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A"],
+    "availability": {
+      "2024-08-21": "WL 45",
+      "2024-08-22": "WL 32",
+      "2024-08-23": "RAC 12",
+      "2024-08-24": "Available 18"
+    }
+  },
+  {
+    "train_number": "12952",
+    "name": "New Delhi Rajdhani",
+    "from": "BCT",
+    "to": "NDLS",
+    "stops": ["BRC", "KOTA", "MTJ"],
+    "departure": "17:40",
+    "arrival": "08:35",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A"],
+    "availability": {
+      "2024-08-21": "Available 12",
+      "2024-08-22": "RAC 5",
+      "2024-08-23": "WL 18",
+      "2024-08-24": "WL 32"
+    }
+  },
+  {
+    "train_number": "12301",
+    "name": "Howrah Rajdhani",
+    "from": "NDLS",
+    "to": "HWH",
+    "stops": ["CNB", "MGS", "ALD"],
+    "departure": "16:55",
+    "arrival": "09:55",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A"],
+    "availability": {
+      "2024-08-21": "RAC 8",
+      "2024-08-22": "Available 22",
+      "2024-08-23": "Available 16",
+      "2024-08-24": "WL 12"
+    }
+  },
+  {
+    "train_number": "12302",
+    "name": "New Delhi Rajdhani",
+    "from": "HWH",
+    "to": "NDLS",
+    "stops": ["ALD", "MGS", "CNB"],
+    "departure": "16:05",
+    "arrival": "10:00",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A"],
+    "availability": {
+      "2024-08-21": "Available 9",
+      "2024-08-22": "Available 14",
+      "2024-08-23": "WL 22",
+      "2024-08-24": "WL 35"
+    }
+  },
+  {
+    "train_number": "12259",
+    "name": "Sealdah Duronto",
+    "from": "NDLS",
+    "to": "HWH",
+    "stops": ["CNB", "MGS"],
+    "departure": "12:45",
+    "arrival": "03:50",
+    "days": ["Mon", "Wed", "Fri"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 32",
+      "2024-08-22": "Available 28",
+      "2024-08-23": "RAC 6",
+      "2024-08-24": "WL 10"
+    }
+  },
+  {
+    "train_number": "12260",
+    "name": "New Delhi Duronto",
+    "from": "HWH",
+    "to": "NDLS",
+    "stops": ["MGS", "CNB"],
+    "departure": "13:05",
+    "arrival": "04:15",
+    "days": ["Tue", "Thu", "Sat"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "WL 18",
+      "2024-08-22": "WL 12",
+      "2024-08-23": "Available 8",
+      "2024-08-24": "Available 14"
+    }
+  },
+  {
+    "train_number": "12909",
+    "name": "Mumbai Garib Rath",
+    "from": "BCT",
+    "to": "NDLS",
+    "stops": ["BRC", "KOTA", "MTJ"],
+    "departure": "11:35",
+    "arrival": "04:00",
+    "days": ["Mon", "Wed", "Fri", "Sun"],
+    "classes": ["3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 42",
+      "2024-08-22": "Available 36",
+      "2024-08-23": "Available 18",
+      "2024-08-24": "RAC 8"
+    }
+  },
+  {
+    "train_number": "12910",
+    "name": "Bandra Garib Rath",
+    "from": "NDLS",
+    "to": "BCT",
+    "stops": ["MTJ", "KOTA", "BRC"],
+    "departure": "15:35",
+    "arrival": "08:10",
+    "days": ["Tue", "Thu", "Sat"],
+    "classes": ["3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 22",
+      "2024-08-22": "RAC 5",
+      "2024-08-23": "WL 12",
+      "2024-08-24": "WL 28"
+    }
+  },
+  {
+    "train_number": "12723",
+    "name": "Telangana Express",
+    "from": "NDLS",
+    "to": "HYB",
+    "stops": ["MTJ", "ALD", "NGP"],
+    "departure": "12:50",
+    "arrival": "15:40",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "WL 22",
+      "2024-08-22": "WL 15",
+      "2024-08-23": "RAC 6",
+      "2024-08-24": "Available 10"
+    }
+  },
+  {
+    "train_number": "12724",
+    "name": "New Delhi Express",
+    "from": "HYB",
+    "to": "NDLS",
+    "stops": ["NGP", "ALD", "MTJ"],
+    "departure": "06:25",
+    "arrival": "10:25",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 8",
+      "2024-08-22": "RAC 10",
+      "2024-08-23": "WL 5",
+      "2024-08-24": "WL 18"
+    }
+  },
+  {
+    "train_number": "12657",
+    "name": "Chennai Mail",
+    "from": "MAS",
+    "to": "NDLS",
+    "stops": ["SECR", "NGP", "BPL", "JHS"],
+    "departure": "22:10",
+    "arrival": "07:15",
+    "days": ["Mon", "Wed", "Fri", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 25",
+      "2024-08-22": "Available 12",
+      "2024-08-23": "RAC 8",
+      "2024-08-24": "WL 20"
+    }
+  },
+  {
+    "train_number": "12658",
+    "name": "Chennai Mail",
+    "from": "NDLS",
+    "to": "MAS",
+    "stops": ["JHS", "BPL", "NGP", "SECR"],
+    "departure": "21:25",
+    "arrival": "06:45",
+    "days": ["Tue", "Thu", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "RAC 15",
+      "2024-08-22": "WL 8",
+      "2024-08-23": "WL 22",
+      "2024-08-24": "Available 10"
+    }
+  },
+  {
+    "train_number": "12715",
+    "name": "Sachkhand Express",
+    "from": "NDLS",
+    "to": "ASR",
+    "stops": ["PNP", "LDH", "JRC"],
+    "departure": "06:55",
+    "arrival": "13:30",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 30",
+      "2024-08-22": "Available 26",
+      "2024-08-23": "Available 18",
+      "2024-08-24": "Available 12"
+    }
+  },
+  {
+    "train_number": "12716",
+    "name": "Sachkhand Express",
+    "from": "ASR",
+    "to": "NDLS",
+    "stops": ["JRC", "LDH", "PNP"],
+    "departure": "22:40",
+    "arrival": "05:00",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 14",
+      "2024-08-22": "Available 22",
+      "2024-08-23": "RAC 6",
+      "2024-08-24": "Available 10"
+    }
+  },
+  {
+    "train_number": "19019",
+    "name": "Mumbai Dehradun Express",
+    "from": "BCT",
+    "to": "NDLS",
+    "stops": ["BRC", "KOTA", "MTJ"],
+    "departure": "17:00",
+    "arrival": "08:55",
+    "days": ["Mon", "Wed", "Sat"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "WL 28",
+      "2024-08-22": "WL 18",
+      "2024-08-23": "WL 10",
+      "2024-08-24": "RAC 4"
+    }
+  },
+  {
+    "train_number": "19020",
+    "name": "Dehradun Express",
+    "from": "NDLS",
+    "to": "BCT",
+    "stops": ["MTJ", "KOTA", "BRC"],
+    "departure": "23:50",
+    "arrival": "16:15",
+    "days": ["Tue", "Thu", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 22",
+      "2024-08-22": "Available 18",
+      "2024-08-23": "RAC 8",
+      "2024-08-24": "WL 6"
+    }
+  },
+  {
+    "train_number": "12791",
+    "name": "Secunderabad Rajdhani",
+    "from": "NDLS",
+    "to": "SECR",
+    "stops": ["JHS", "BPL", "NGP"],
+    "departure": "15:55",
+    "arrival": "13:35",
+    "days": ["Mon", "Wed", "Fri", "Sun"],
+    "classes": ["1A", "2A", "3A"],
+    "availability": {
+      "2024-08-21": "Available 10",
+      "2024-08-22": "Available 8",
+      "2024-08-23": "RAC 4",
+      "2024-08-24": "WL 6"
+    }
+  },
+  {
+    "train_number": "12792",
+    "name": "New Delhi Rajdhani",
+    "from": "SECR",
+    "to": "NDLS",
+    "stops": ["NGP", "BPL", "JHS"],
+    "departure": "12:45",
+    "arrival": "10:25",
+    "days": ["Mon", "Tue", "Thu", "Sat"],
+    "classes": ["1A", "2A", "3A"],
+    "availability": {
+      "2024-08-21": "WL 12",
+      "2024-08-22": "RAC 8",
+      "2024-08-23": "Available 6",
+      "2024-08-24": "Available 14"
+    }
+  },
+  {
+    "train_number": "12165",
+    "name": "Ratnagiri Superfast Express",
+    "from": "LTT",
+    "to": "BSL",
+    "stops": ["KYN", "NK", "JL"],
+    "departure": "05:10",
+    "arrival": "12:55",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 32",
+      "2024-08-22": "Available 28",
+      "2024-08-23": "Available 22",
+      "2024-08-24": "Available 18"
+    }
+  },
+  {
+    "train_number": "12166",
+    "name": "Ratnagiri Superfast Express",
+    "from": "BSL",
+    "to": "LTT",
+    "stops": ["JL", "NK", "KYN"],
+    "departure": "15:05",
+    "arrival": "22:30",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 24",
+      "2024-08-22": "Available 22",
+      "2024-08-23": "Available 18",
+      "2024-08-24": "RAC 6"
+    }
+  },
+  {
+    "train_number": "11045",
+    "name": "Jalgaon Express",
+    "from": "JL",
+    "to": "PUNE",
+    "stops": ["BSL", "MMR", "NK"],
+    "departure": "09:30",
+    "arrival": "18:45",
+    "days": ["Mon", "Wed", "Fri"],
+    "classes": ["SL", "2S"],
+    "availability": {
+      "2024-08-21": "WL 45",
+      "2024-08-22": "WL 32",
+      "2024-08-23": "WL 18",
+      "2024-08-24": "RAC 8",
+      "2024-05-27": "Available 12"
+    }
+  },
+  {
+    "train_number": "16339",
+    "name": "Jalgaon Chennai Express",
+    "from": "JL",
+    "to": "MAS",
+    "stops": ["BSL", "BPL", "NGP", "SECR", "HYB"],
+    "departure": "21:15",
+    "arrival": "18:30",
+    "days": ["Mon", "Thu", "Sat"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-05-27": "Available 15",
+      "2024-05-28": "Available 8",
+      "2024-08-21": "WL 25",
+      "2024-08-22": "WL 18",
+      "2025-05-27": "Available 22"
+    }
+  },
+  {
+    "train_number": "16341",
+    "name": "Tapti Ganga Express",
+    "from": "JL",
+    "to": "MAS",
+    "stops": ["BSL", "NGP", "HYB"],
+    "departure": "08:15",
+    "arrival": "05:30",
+    "days": ["Tue", "Thu", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-05-27": "Available 10",
+      "2024-05-28": "RAC 5",
+      "2024-05-29": "WL 15",
+      "2025-05-27": "Available 18"
+    }
+  },
+  {
+    "train_number": "11046",
+    "name": "Jalgaon Express",
+    "from": "PUNE",
+    "to": "JL",
+    "stops": ["NK", "MMR", "BSL"],
+    "departure": "07:15",
+    "arrival": "16:30",
+    "days": ["Tue", "Thu", "Sat"],
+    "classes": ["SL", "2S"],
+    "availability": {
+      "2024-08-21": "Available 10",
+      "2024-08-22": "Available 8",
+      "2024-08-23": "RAC 4",
+      "2024-08-24": "WL 10"
+    }
+  },
+  {
+    "train_number": "19301",
+    "name": "Yasvantpur Express",
+    "from": "INDB",
+    "to": "SBC",
+    "stops": ["BRC", "PUNE", "HYB"],
+    "departure": "11:30",
+    "arrival": "17:40",
+    "days": ["Mon", "Wed", "Fri"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 18",
+      "2024-08-22": "RAC 12",
+      "2024-08-23": "WL 10",
+      "2024-08-24": "WL 25"
+    }
+  },
+  {
+    "train_number": "19302",
+    "name": "Yasvantpur Express",
+    "from": "SBC",
+    "to": "INDB",
+    "stops": ["HYB", "PUNE", "BRC"],
+    "departure": "13:45",
+    "arrival": "20:10",
+    "days": ["Tue", "Thu", "Sat"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 22",
+      "2024-08-22": "Available 16",
+      "2024-08-23": "RAC 8",
+      "2024-08-24": "WL 6"
+    }
+  },
+  {
+    "train_number": "12969",
+    "name": "Jaipur Chennai Express",
+    "from": "JP",
+    "to": "MAS",
+    "stops": ["KOTA", "NGP", "SECR", "HYB"],
+    "departure": "06:45",
+    "arrival": "21:40",
+    "days": ["Wed", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "WL 22",
+      "2024-08-22": "WL 16",
+      "2024-08-23": "RAC 8",
+      "2024-08-24": "Available 12"
+    }
+  },
+  {
+    "train_number": "12970",
+    "name": "Chennai Jaipur Express",
+    "from": "MAS",
+    "to": "JP",
+    "stops": ["HYB", "SECR", "NGP", "KOTA"],
+    "departure": "14:00",
+    "arrival": "05:15",
+    "days": ["Mon", "Fri"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 26",
+      "2024-08-22": "Available 22",
+      "2024-08-23": "Available 14",
+      "2024-08-24": "RAC 8"
+    }
+  },
+  {
+    "train_number": "12247",
+    "name": "Bandra Nizamuddin Yuva Express",
+    "from": "BCT",
+    "to": "NDLS",
+    "stops": ["BRC", "KOTA", "MTJ"],
+    "departure": "23:25",
+    "arrival": "15:35",
+    "days": ["Mon", "Thu", "Sat"],
+    "classes": ["3A", "SL", "2S"],
+    "availability": {
+      "2024-08-21": "Available 42",
+      "2024-08-22": "Available 36",
+      "2024-08-23": "Available 28",
+      "2024-08-24": "Available 22"
+    }
+  },
+  {
+    "train_number": "12248",
+    "name": "Hazrat Nizamuddin Yuva Express",
+    "from": "NDLS",
+    "to": "BCT",
+    "stops": ["MTJ", "KOTA", "BRC"],
+    "departure": "23:45",
+    "arrival": "16:10",
+    "days": ["Tue", "Fri", "Sun"],
+    "classes": ["3A", "SL", "2S"],
+    "availability": {
+      "2024-08-21": "Available 32",
+      "2024-08-22": "Available 26",
+      "2024-08-23": "RAC 18",
+      "2024-08-24": "WL 12"
+    }
+  },
+  {
+    "train_number": "12621",
+    "name": "Tamil Nadu Express",
+    "from": "MAS",
+    "to": "NDLS",
+    "stops": ["SECR", "NGP", "BPL", "JHS"],
+    "departure": "22:00",
+    "arrival": "07:05",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "RAC 15",
+      "2024-08-22": "WL 12",
+      "2024-08-23": "WL 25",
+      "2024-08-24": "WL 42"
+    }
+  },
+  {
+    "train_number": "12622",
+    "name": "Tamil Nadu Express",
+    "from": "NDLS",
+    "to": "MAS",
+    "stops": ["JHS", "BPL", "NGP", "SECR"],
+    "departure": "22:30",
+    "arrival": "06:45",
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "WL 36",
+      "2024-08-22": "WL 28",
+      "2024-08-23": "WL 14",
+      "2024-08-24": "RAC 10"
+    }
+  },
+  {
+    "train_number": "12809",
+    "name": "Mumbai - Howrah Mail",
+    "from": "CSTM",
+    "to": "HWH",
+    "stops": ["NGP", "BSL", "BBS"],
+    "departure": "21:50",
+    "arrival": "04:30",
+    "days": ["Mon", "Wed", "Fri", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "WL 24",
+      "2024-08-22": "WL 18",
+      "2024-08-23": "RAC 10",
+      "2024-08-24": "Available 8"
+    }
+  },
+  {
+    "train_number": "12810",
+    "name": "Howrah - Mumbai Mail",
+    "from": "HWH",
+    "to": "CSTM",
+    "stops": ["BBS", "BSL", "NGP"],
+    "departure": "22:15",
+    "arrival": "05:05",
+    "days": ["Tue", "Thu", "Sat", "Sun"],
+    "classes": ["2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 16",
+      "2024-08-22": "RAC 8",
+      "2024-08-23": "WL 6",
+      "2024-08-24": "WL 18"
+    }
+  },
+  {
+    "train_number": "12903",
+    "name": "Golden Temple Mail",
+    "from": "BCT",
+    "to": "ASR",
+    "stops": ["BRC", "KOTA", "NDLS"],
+    "departure": "23:59",
+    "arrival": "21:30",
+    "days": ["Mon", "Wed", "Thu", "Sat"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "Available 24",
+      "2024-08-22": "Available 18",
+      "2024-08-23": "RAC 12",
+      "2024-08-24": "WL 8"
+    }
+  },
+  {
+    "train_number": "12904",
+    "name": "Golden Temple Mail",
+    "from": "ASR",
+    "to": "BCT",
+    "stops": ["NDLS", "KOTA", "BRC"],
+    "departure": "07:20",
+    "arrival": "05:30",
+    "days": ["Tue", "Thu", "Fri", "Sun"],
+    "classes": ["1A", "2A", "3A", "SL"],
+    "availability": {
+      "2024-08-21": "WL 16",
+      "2024-08-22": "WL 10",
+      "2024-08-23": "RAC 6",
+      "2024-08-24": "Available 12"
+    }
+  }
+]
