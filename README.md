@@ -1,4 +1,3 @@
-# TrainMate
 # 🚆 TrainMate — Smarter Train Availability & Route Planner
 
 ## 💡 Problem Statement
