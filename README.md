@@ -21,7 +21,7 @@ All in one place — quick, efficient, and stress-free.
 |-------------|--------------------|
 | Frontend    | HTML, CSS, JavaScript |
 | Backend     | Flask (Python)     |
-| Database    | MySQL(To be use further            |
+| Database    | MySQL (To be use further)          |
 | APIs        | (To be integrated: Railway APIs for live data) |
 
 ---
