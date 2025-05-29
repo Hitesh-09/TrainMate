@@ -74,8 +74,6 @@ All in one place — quick, efficient, and stress-free.
 
 ---
 
-## 🏁 Built With ❤️  By HITESH
-B.Tech CSE, 3rd Year | Web & Game Developer
 ## 🧑‍💻 Built With ❤️ by Hitesh  
 B.Tech CSE, 3rd Year | Web & Game Developer  
 [LinkedIn](https://www.linkedin.com/in/hitesh-09) 
