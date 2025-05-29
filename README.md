@@ -1,5 +1,5 @@
 # TrainMate
-# 🚆 SmartTrain — Smarter Train Availability & Route Planner
+# 🚆 TrainMate — Smarter Train Availability & Route Planner
 
 ## 💡 Problem Statement
 
@@ -22,7 +22,7 @@ All in one place — quick, efficient, and stress-free.
 |-------------|--------------------|
 | Frontend    | HTML, CSS, JavaScript |
 | Backend     | Flask (Python)     |
-| Database    | MySQL              |
+| Database    | MySQL(To be use further            |
 | APIs        | (To be integrated: Railway APIs for live data) |
 
 ---
@@ -75,5 +75,10 @@ All in one place — quick, efficient, and stress-free.
 
 ---
 
-## 🏁 Built With ❤️ 
+## 🏁 Built With ❤️  By HITESH
+B.Tech CSE, 3rd Year | Web & Game Developer
+## 🧑‍💻 Built With ❤️ by Hitesh  
+B.Tech CSE, 3rd Year | Web & Game Developer  
+[LinkedIn](https://www.linkedin.com/in/hitesh-09) 
+
 
